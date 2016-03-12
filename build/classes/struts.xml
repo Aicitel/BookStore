@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<constant name="struts.objectFactory" value="spring" />
+
+	<package name="basicstruts2" extends="struts-default">
+
+		<action name="index">
+			<result>/index.jsp</result>
+		</action>
+		
+		<action name="register">
+			<result>/register.jsp</result>	
+		</action>
+		
+		<action name="login" class="loginclass"
+			method="verify">
+			<result type="chain" name="success">ShowInfo</result>
+			<result type="chain" name="root">ShowRoot</result>
+			<result name="fail">/index.jsp</result>
+		</action>
+		
+		<action name="ShowRoot" class="loginclass"
+			method="getrootinfo"> 
+			<result name="information">/admin.jsp</result>
+		</action>
+	
+		<action name="ShowInfo" class="loginclass"
+			method="getinfo"> 
+			<result name="information">/main.jsp</result>
+		</action>
+		
+		<action name="UserRemovebook" class="loginclass"
+			method="userremovebook">
+			<result name="changed">/main.jsp</result>
+		</action>
+
+		<action name="UserAddbook" class="loginclass"
+			method="useraddbook">
+			<result name="changed">/main.jsp</result>
+		</action>
+		
+		<action name="UserOrderbook" class="loginclass"
+			method="userorderbook">
+			<result name="changed">/main.jsp</result>
+		</action>
+		
+		<action name="RootUpdatebook" class="loginclass"
+			method="rootupdatebook">
+			<result type="chain" name="changed">ShowRoot</result>
+		</action>
+		
+		<action name="RootUpdateorder" class="loginclass"
+			method="rootupdateorder">
+			<result type="chain" name="changed">ShowRoot</result>
+		</action>
+		
+		<action name="RootUpdateuser" class="loginclass"
+			method="rootupdateuser">
+			<result type="chain" name="changed">ShowRoot</result>
+		</action>
+		
+		<action name="UserProfile" class="loginclass"
+			method="userprofile">
+			<result name="profile">/profile.jsp</result>
+		</action>
+		
+		<action name="UserUpdateprofile" class="loginclass"
+			method="userupdateprofile">
+			<result name="changed">/profile.jsp</result>
+		</action>
+		
+		<action name="LogOut" class="loginclass"
+			method="logout">
+			<result name="drop">/index.jsp</result>
+		</action>
+	</package>
+
+</struts>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"  
+	  xmlns:security="http://www.springframework.org/schema/security"  
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+	  xsi:schemaLocation="http://www.springframework.org/schema/beans  
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+          http://www.springframework.org/schema/security  
+          http://www.springframework.org/schema/security/spring-security-3.0.3.xsd">
+	  
+      <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  
+        destroy-method="close">  
+        <property name="driverClassName">  
+            <value>com.mysql.jdbc.Driver</value>  
+        </property>  
+        <property name="url">  
+            <value>jdbc:mysql://localhost:3306/bookstore</value>  
+        </property>  
+        <property name="username">  
+            <value>root</value>  
+        </property>  
+        <property name="password">  
+            <value>5130379058</value>  
+        </property>
+        <!-- 
+        <property name="maxPoolSize">  
+            <value>20</value>  
+        </property>  
+        <property name="minPoolSize">  
+            <value>1</value>  
+        </property>  
+        <property name="initialPoolSize">  
+            <value>1</value>  
+        </property>  
+        <property name="maxIdleTime">  
+            <value>20</value>  
+        </property>
+         -->  
+     </bean>
+          
+	 <bean id="sessionFactory"  
+        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">  
+        <property name="dataSource">  
+            <ref local="dataSource" />  
+        </property>  
+        <property name="mappingResources">  
+            <list>  
+                <value>entity/User.hbm.xml</value>  
+                <value>entity/Book.hbm.xml</value>  
+                <value>entity/Userbook.hbm.xml</value>  
+            </list>  
+        </property>  
+        <property name="hibernateProperties">  
+            <props>  
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>  
+                <prop key="show_sql">false</prop>  
+                <prop key="hibernate.jdbc.batch_size">20</prop>  
+            </props>  
+        </property>  
+     </bean>
+    
+	 <bean id = "invoke" class="action.Invoketest">
+	 </bean>
+	 
+	 <bean id = "userDaoimpl" class="Daoimpl.UserDaoimpl">
+	 	<property name="sessionFactory">  
+            <ref bean="sessionFactory" />    
+        </property> 
+	 </bean>
+	 
+	 <bean id = "bookDaoimpl" class="Daoimpl.BookDaoimpl">
+	 	<property name="sessionFactory">  
+            <ref bean="sessionFactory" />    
+        </property> 
+	 </bean>
+	 
+	 <bean id = "orderDaoimpl" class="Daoimpl.OrderDaoimpl">
+	 	<property name="sessionFactory">  
+            <ref bean="sessionFactory" />    
+        </property> 
+	 </bean>
+	 
+	 
+	 <bean id = "userservice" class="service.UserService">
+	 	<property name="userDao">
+	 		<ref bean = "userDaoimpl"/>
+	 	</property>
+	 </bean>
+	 
+	 <bean id = "bookservice" class="service.BookService">
+	 	<property name="bookDao">
+	 		<ref bean = "bookDaoimpl"/>
+	 	</property>
+	 </bean>
+
+	 <bean id = "orderservice" class="service.OrderService">
+	 	<property name="orderDao">
+	 		<ref bean = "orderDaoimpl"/>
+	 	</property>
+	 </bean>
+
+	 <bean id = "trolleyservice" class="service.TrolleyService">
+	 	<property name="orderManager">
+	 		<ref bean = "orderservice"/>
+	 	</property>
+	 	<property name = "bookManager">
+	 		<ref bean = "bookservice"/>
+	 	</property>
+	 	<property name = "userManager">
+	 		<ref bean = "userservice"/>
+	 	</property>
+	 </bean>
+	 
+	 <bean id = "loginclass" class="action.LoginAction">
+	 	<property name = "orderManager">
+	 		<ref bean = "orderservice"/>
+	 	</property>
+	 	<property name = "userManager">
+	 		<ref bean = "userservice"/>
+	 	</property>
+	 	<property name = "bookManager">
+	 		<ref bean = "bookservice"/>
+	 	</property>
+	 	<property name = "trolleyManager">
+	 		<ref bean = "trolleyservice"/>
+	 	</property>
+	 </bean>
+	 		
+ </beans>
